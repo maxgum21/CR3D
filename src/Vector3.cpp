@@ -13,14 +13,6 @@ Vector3& Vector3::operator=(const Vector3& v) {
 
 Vector3::~Vector3() {}
 
-Vector3 Vector3::operator+(const Vector3& v) {
-    return Vector3(x + v.x, y + v.y, z + v.z);
-}
-
-Vector3 Vector3::operator-(const Vector3& v) {
-    return Vector3(x - v.x, y - v.y, z - v.z);
-}
-
 Vector3& Vector3::operator+=(const Vector3& v) {
     x += v.x;
     y += v.y;
@@ -35,18 +27,6 @@ Vector3& Vector3::operator-=(const Vector3& v) {
     return *this;
 }
 
-float Vector3::operator*(const Vector3& v) {
-    return x * v.x + y * v.y + z * v.z;
-}
-
-Vector3 Vector3::operator%(const Vector3& v) {
-    return Vector3(
-                y * v.z - z * v.y,
-                z * v.x - x * v.z,
-                x * v.y - y * v.x
-            );
-}
-
 Vector3& Vector3::scale(float s) {
     x *= s;
     y *= s;
@@ -54,7 +34,7 @@ Vector3& Vector3::scale(float s) {
     return *this;
 }
 
-float Vector3::length() {
+float Vector3::length() const {
     return sqrt(x*x + y*y + z*z);
 }
 
@@ -64,4 +44,32 @@ Vector3& Vector3::normalize() {
     y /= len;
     z /= len;
     return *this;
+}
+
+Vector3 Vector3::normalized() const {
+    float len = length();
+    return Vector3(
+            x / len,
+            y / len,
+            z / len);
+}
+
+Vector3 Vector3::operator+(const Vector3& v) const {
+    return Vector3(x + v.x, y + v.y, z + v.z);
+}
+
+Vector3 Vector3::operator-(const Vector3& v) const {
+    return Vector3(x - v.x, y - v.y, z - v.z);
+}
+
+float Vector3::operator*(const Vector3& v) const {
+    return x * v.x + y * v.y + z * v.z;
+}
+
+Vector3 Vector3::operator%(const Vector3& v) const {
+    return Vector3(
+                y * v.z - z * v.y,
+                z * v.x - x * v.z,
+                x * v.y - y * v.x
+            );
 }

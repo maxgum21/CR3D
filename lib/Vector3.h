@@ -10,18 +10,19 @@ class Vector3 {
 
         Vector3& operator=(const Vector3& v);
 
-        Vector3 operator+(const Vector3& v);
-        Vector3 operator-(const Vector3& v);
         Vector3& operator+=(const Vector3& v);
         Vector3& operator-=(const Vector3& v);
-        
-        float operator*(const Vector3& v);
-        Vector3 operator%(const Vector3& v);
+
+        Vector3 operator+(const Vector3& v) const;
+        Vector3 operator-(const Vector3& v) const;
+        float operator*(const Vector3& v) const;
+        Vector3 operator%(const Vector3& v) const;
 
         Vector3& scale(float s);
-
-        float length();
         Vector3& normalize();
+
+        float length() const;
+        Vector3 normalized() const;
 
         float x, y, z;
 };

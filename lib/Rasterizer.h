@@ -8,11 +8,10 @@
 class Rasterizer {
     public:
         Rasterizer(int width, int height);
-        void initializeRasterizer(int width, int height);
 
         ~Rasterizer();
         
-        void drawTri(Vector2& v0, Vector2& v1, Vector2& v2);
+        void drawTri(const Vector2& v0, const Vector2& v1, const Vector2& v2);
 
         inline void swap() {
             sFrame = framebuffers[currentframe ^= 1];

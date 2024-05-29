@@ -7,7 +7,7 @@ OBJ = bin
 
 TARGET = program
 
-CFLAGS = -lm -lpthread -lncurses
+CFLAGS = -lm -lpthread -lncurses -Wall
 
 _OBJ = main.o Vector2.o Vector3.o Vector4.o Rasterizer.o Framebuffer.o
 ALLOBJ = $(patsubst %,$(OBJ)/%,$(_OBJ))

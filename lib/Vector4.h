@@ -10,17 +10,18 @@ class Vector4 {
 
         Vector4& operator=(const Vector4& v);
 
-        Vector4 operator+(const Vector4& v);
-        Vector4 operator-(const Vector4& v);
         Vector4& operator+=(const Vector4& v);
         Vector4& operator-=(const Vector4& v);
         
-        float operator*(const Vector4& v);
+        Vector4 operator+(const Vector4& v) const ;
+        Vector4 operator-(const Vector4& v) const ;
+        float operator*(const Vector4& v) const ;
 
         Vector4& scale(float s);
 
-        float length();
+        float length() const ;
         Vector4& normalize();
+        Vector4 normalized() const;
 
         float x, y, z, w;
 };

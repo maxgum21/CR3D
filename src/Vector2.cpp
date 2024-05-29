@@ -13,14 +13,6 @@ Vector2& Vector2::operator=(const Vector2& v) {
 
 Vector2::~Vector2() {}
 
-Vector2 Vector2::operator+(const Vector2& v) {
-    return Vector2(x + v.x, y + v.y);
-}
-
-Vector2 Vector2::operator-(const Vector2& v) {
-    return Vector2(x - v.x, y - v.y);
-}
-
 Vector2& Vector2::operator+=(const Vector2& v) {
     x += v.x;
     y += v.y;
@@ -33,13 +25,6 @@ Vector2& Vector2::operator-=(const Vector2& v) {
     return *this;
 }
 
-float Vector2::operator*(const Vector2& v) {
-    return x * v.x + y * v.y;
-}
-
-float Vector2::operator%(const Vector2& v) {
-    return x * v.y - y * v.x;
-}
 
 Vector2& Vector2::scale(float s) {
     x *= s;
@@ -47,7 +32,7 @@ Vector2& Vector2::scale(float s) {
     return *this;
 }
 
-float Vector2::length() {
+float Vector2::length() const {
     return sqrt(x*x + y*y);
 }
 
@@ -56,4 +41,29 @@ Vector2& Vector2::normalize() {
     x /= len;
     y /= len;
     return *this;
+}
+
+Vector2 Vector2::normalized() const {
+    float len = length();
+    return Vector2(
+            x / len,
+            y / len
+            );
+}
+
+
+Vector2 Vector2::operator+(const Vector2& v) const {
+    return Vector2(x + v.x, y + v.y);
+}
+
+Vector2 Vector2::operator-(const Vector2& v) const {
+    return Vector2(x - v.x, y - v.y);
+}
+
+float Vector2::operator*(const Vector2& v) const {
+    return x * v.x + y * v.y;
+}
+
+float Vector2::operator%(const Vector2& v) const {
+    return (x * v.y) - (y * v.x);
 }

@@ -7,12 +7,15 @@
 #define MAX_DEPTH 0xFF
 
 typedef u_int8_t depth_t;
-typedef u_int16_t color_t;
+typedef u_int8_t color_t;
 
 class Framebuffer {
     public:
         Framebuffer(int width, int height);
         ~Framebuffer();
+        Framebuffer(const Framebuffer& fb);
+
+        Framebuffer& operator=(const Framebuffer& fb);
 
         void setPixel(int x, int y, depth_t depth, color_t color);
 
