@@ -1,21 +1,29 @@
-.PHONY: all clean OBJ run
+.PHONY: all clean re run
 
 CC = g++
 
 SRC	= src
 OBJ = bin
+DEP = lib
 
 TARGET = program
 
-CFLAGS = -lm -lpthread -lncurses -Wall
+CFLAGS = -lm -lpthread -lncurses -Wall -std=c++20
 
-_OBJ = main.o Vector2.o Vector3.o Vector4.o Rasterizer.o Framebuffer.o
+_DEP = defs.h Vector2.h Vector3.h Vector4.h Rasterizer.h Framebuffer.h Matrix2x2.h Matrix3x3.h Matrix4x4.h Camera.h
+ALLDEP = $(patsubst %,$(DEP)/%,$(_DEP))
+
+_OBJ = main.o Vector2.o Vector3.o Vector4.o Rasterizer.o Framebuffer.o Matrix2x2.o Matrix3x3.o Matrix4x4.o Camera.o
 ALLOBJ = $(patsubst %,$(OBJ)/%,$(_OBJ))
+
+all: run
+
+re: clean all
 
 run: build
 	./$(TARGET)
 
-build: $(ALLOBJ)
+build: $(ALLOBJ) 
 	$(CC) -o $(TARGET) $^ $(CFLAGS)
 
 clean:

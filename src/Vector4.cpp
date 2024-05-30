@@ -72,3 +72,19 @@ Vector4 Vector4::operator-(const Vector4& v) const {
 float Vector4::operator*(const Vector4& v) const {
     return x * v.x + y * v.y + z * v.z + w * v.w;
 }
+
+Vector4 Vector4::operator*(float t) const {
+    return Vector4(*this).scale(t);
+}
+
+float Vector4::getDistance(const Vector4& a, const Vector4& b) {
+    return (a - b).length();
+}
+
+Vector4 Vector4::lerp(const Vector4& a, const Vector4& b, float t) {
+    return a + ((b - a) * t);
+}
+
+void Vector4::print(std::stringstream& stream) {
+    stream << x << ' ' << y << ' ' << z << ' ' << w << '\n';
+}

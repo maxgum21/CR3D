@@ -15,6 +15,7 @@ class Vector3 {
 
         Vector3 operator+(const Vector3& v) const;
         Vector3 operator-(const Vector3& v) const;
+        Vector3 operator*(float t) const ;
         float operator*(const Vector3& v) const;
         Vector3 operator%(const Vector3& v) const;
 
@@ -23,6 +24,9 @@ class Vector3 {
 
         float length() const;
         Vector3 normalized() const;
+
+        static float getDistance(const Vector3& a, const Vector3& b);
+        static Vector3 lerp(const Vector3& a, const Vector3&b, float t);
 
         float x, y, z;
 };

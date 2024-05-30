@@ -1,23 +1,55 @@
 #include "../lib/Rasterizer.h"
 #include <ncurses.h>
+#include <thread>
 
 #define MAX(a, b) ((a > b) ? a : b)
 #define MIN(a, b) ((a > b) ? b : a)
 
+bool renderStart, renderFinished, programRunning;
+
+void renderThreadF(bool(**renderCB)()){
+    while(programRunning){
+        if(renderStart){
+            renderStart = false;
+            renderFinished = false;
+
+            if(*renderCB != nullptr){
+                (*renderCB)();
+            }
+
+            renderFinished = true;
+        }
+    }
+}
+
+
 Rasterizer::Rasterizer(int width, int height)
-    : currentframe(0), sFrame(nullptr), rFrame(nullptr), width(width), height(height) {
+    : width(width), height(height), renderCB(nullptr),
+      sFrame(nullptr), rFrame(nullptr), currentframe(0) {
+
     framebuffers[0] = new Framebuffer(width, height);
     framebuffers[1] = new Framebuffer(width, height);
     swap();
+
+    programRunning = true;
+    renderStart = false;
+    renderFinished = false;
+    renderThread = std::thread(renderThreadF, &renderCB);
 }
 
 Rasterizer::~Rasterizer() {
+    programRunning = false;
+
+    renderThread.join();
+
     delete framebuffers[1];
     delete framebuffers[0];
 }
 
-void Rasterizer::show() {
+void Rasterizer::presentFrame() {
+    renderStart = true;
     sFrame->show();
+    while (!renderFinished);
 }
 
 void Rasterizer::clear() {
@@ -31,7 +63,14 @@ float edgeCross(const Vector2& a, const Vector2& b, Vector2& p) {
     return ap % ab;
 }
 
-void Rasterizer::drawTri(const Vector2& v0, const Vector2& v1, const Vector2& v2) {
+void Rasterizer::drawTri(const Vector2& vv0, const Vector2& vv1, const Vector2& vv2) {
+
+    float h_width = this->width * 0.5, h_height = this->height * 0.5;
+
+    Vector2 v0 = Vector2(vv0.x * h_width + h_width, -vv0.y * h_height + h_height);
+    Vector2 v1 = Vector2(vv1.x * h_width + h_width, -vv1.y * h_height + h_height);
+    Vector2 v2 = Vector2(vv2.x * h_width + h_width, -vv2.y * h_height + h_height);
+
     int xmin = MAX(0, MIN(v0.x, MIN(v1.x, v2.x)));
     int ymin = MAX(0, MIN(v0.y, MIN(v1.y, v2.y)));
     int xmax = MIN(width, MAX(v0.x, MAX(v1.x, v2.x)));

@@ -67,3 +67,15 @@ float Vector2::operator*(const Vector2& v) const {
 float Vector2::operator%(const Vector2& v) const {
     return (x * v.y) - (y * v.x);
 }
+
+Vector2 Vector2::operator*(const float t) const {
+    return Vector2(*this).scale(t);
+}
+
+float Vector2::getDistance(const Vector2& a, const Vector2& b) {
+    return (a - b).length();
+}
+
+Vector2 Vector2::lerp(const Vector2& a, const Vector2& b, float t) {
+    return a + ((b - a) * t);
+}

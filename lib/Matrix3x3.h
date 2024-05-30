@@ -1,9 +1,8 @@
-
 #ifndef INCLUDE_MATRIX3X3_H
 #define INCLUDE_MATRIX3X3_H
 
-#include "../lib/defs.h"
-#include "../lib/Vector3.h"
+#include "defs.h"
+#include "Vector3.h"
 
 class Matrix3x3 {
     public:
@@ -29,8 +28,8 @@ class Matrix3x3 {
         Matrix3x3& scale(const float s);
         Matrix3x3 scaled(const float s) const;
 
-        inline float det() const { return m00*m11*m22 + m01*m12*m20 + m10*m21*m02\
-                                        - m02*m11*m20 - m01*m10*m22 + m12*m21*m00; }
+        inline float det() const { return m00*m11*m22 + m01*m12*m20 + m10*m21*m02 -\
+                                          m02*m11*m20 - m01*m10*m22 - m12*m21*m00; }
 
         Matrix3x3& transpose();
         Matrix3x3 transposed() const;
@@ -38,11 +37,11 @@ class Matrix3x3 {
         Matrix3x3& invert();
         Matrix3x3 inverted() const; 
             
-    private:
-
         float m00, m01, m02;
         float m10, m11, m12;
         float m20, m21, m22;
 };
+
+void fSwap(float& a, float& b);
 
 #endif

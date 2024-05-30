@@ -77,6 +77,17 @@ Vector2 Matrix2x2::operator*(const Vector2& v) const {
             );
 }
 
+Matrix2x2& Matrix2x2::scale(const float s) {
+    m00 *= s;
+    m01 *= s;
+    m10 *= s;
+    m11 *= s;
+    return *this;
+}
+
+Matrix2x2 Matrix2x2::scaled(const float s) const {
+    return Matrix2x2(*this).scale(s);
+}
 
 Matrix2x2& Matrix2x2::transpose() {
     float temp = m01;
@@ -86,8 +97,7 @@ Matrix2x2& Matrix2x2::transpose() {
 }
 
 Matrix2x2 Matrix2x2::transposed() const {
-    return Matrix2x2(m00, m10,
-                     m01, m11);
+    return Matrix2x2(*this).transpose();
 }
 
 Matrix2x2& Matrix2x2::invert() {
@@ -106,9 +116,5 @@ Matrix2x2& Matrix2x2::invert() {
 }
 
 Matrix2x2 Matrix2x2::inverted() const {
-    float d = det();
-    return Matrix2x2(
-            -m11 / d, m01 / d,
-            m10 / d, -m11 / d
-            );
+    return Matrix2x2(*this).invert();
 }

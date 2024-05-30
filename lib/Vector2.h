@@ -14,6 +14,7 @@ class Vector2 {
 
         Vector2 operator+(const Vector2& v) const;
         Vector2 operator-(const Vector2& v) const;
+        Vector2 operator*(const float t) const;
         float operator*(const Vector2& v) const;
         float operator%(const Vector2& v) const;
         
@@ -23,6 +24,9 @@ class Vector2 {
         float length() const;
         Vector2& normalize();
         Vector2 normalized() const;
+
+        static float getDistance(const Vector2& a, const Vector2& b);
+        static Vector2 lerp(const Vector2& a, const Vector2& b, float t);
 
         float x, y;
 };

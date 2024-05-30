@@ -4,6 +4,7 @@
 #include "defs.h"
 #include "Framebuffer.h"
 #include "Vector2.h"
+#include "Vector4.h"
 
 class Rasterizer {
     public:
@@ -13,20 +14,28 @@ class Rasterizer {
         
         void drawTri(const Vector2& v0, const Vector2& v1, const Vector2& v2);
 
+        inline void setRenderCB(bool (*renderCBFunc)()) {
+            renderCB = renderCBFunc;
+        }
+
         inline void swap() {
             sFrame = framebuffers[currentframe ^= 1];
             rFrame = framebuffers[currentframe ^ 1];
         }
 
-        void show();
+        void presentFrame();
+
 
         void clear();
 
     private:
         int width, height;
+        bool (*renderCB)();
         Framebuffer *sFrame, *rFrame;
         int currentframe;
         Framebuffer *framebuffers[2];
+
+        std::thread renderThread;
 };
 
 #endif

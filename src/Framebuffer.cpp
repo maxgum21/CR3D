@@ -1,5 +1,6 @@
 #include "../lib/Framebuffer.h"
-#include <cstring>
+#include "../lib/defs.h"
+#include <unistd.h>
 
 Framebuffer::Framebuffer(int width, int height)
     : width(width), height(height)

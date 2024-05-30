@@ -6,5 +6,9 @@
 #include <cstring>
 #include <iostream>
 #include <thread>
+#include <unistd.h>
+#include <string>
+#include <sstream>
+#include <time.h>
 
 #endif

@@ -73,3 +73,16 @@ Vector3 Vector3::operator%(const Vector3& v) const {
                 x * v.y - y * v.x
             );
 }
+
+
+Vector3 Vector3::operator*(float t) const {
+    return Vector3(*this).scale(t);
+}
+
+float Vector3::getDistance(const Vector3& a, const Vector3& b) {
+    return (a - b).length();
+}
+
+Vector3 Vector3::lerp(const Vector3& a, const Vector3& b, float t) {
+    return a + ((b - a) * t);
+}

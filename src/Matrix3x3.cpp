@@ -1,4 +1,5 @@
 #include "../lib/Matrix3x3.h"
+#include <cmath>
 
 Matrix3x3::Matrix3x3()
     : m00(0), m01(0), m02(0),
@@ -55,7 +56,7 @@ Matrix3x3& Matrix3x3::operator-=(const Matrix3x3& m) {
 Matrix3x3 Matrix3x3::operator+(const Matrix3x3& m) const {
     return Matrix3x3(
             m00 + m.m00,  m01 + m.m01, m02 + m.m02,
-            m10 + m.m10,  m11 + m.m11, m02 + m.m02,
+            m10 + m.m10,  m11 + m.m11, m12 + m.m02,
             m20 + m.m20,  m21 + m.m21, m22 + m.m22
             );
 }
@@ -70,9 +71,17 @@ Matrix3x3 Matrix3x3::operator-(const Matrix3x3& m) const {
 
 Matrix3x3 Matrix3x3::operator*(const Matrix3x3& m) const {
     return Matrix3x3(
-            m00*m.m00+m01*m.m10+m02*m.m20, m00*m.m01+m01*m.m11+m02*m.m21, m00*m.m02+m01*m.m12+m02*m.m22,
-            m10*m.m00+m11*m.m10+m12*m.m20, m10*m.m01+m11*m.m11+m12*m.m21, m10*m.m02+m11*m.m12+m12*m.m22,
-            m20*m.m00+m21*m.m10+m22*m.m20, m20*m.m01+m21*m.m11+m22*m.m21, m20*m.m02+m21*m.m12+m22*m.m22
+            m00*m.m00+m01*m.m10+m02*m.m20,
+            m00*m.m01+m01*m.m11+m02*m.m21,
+            m00*m.m02+m01*m.m12+m02*m.m22,
+
+            m10*m.m00+m11*m.m10+m12*m.m20,
+            m10*m.m01+m11*m.m11+m12*m.m21,
+            m10*m.m02+m11*m.m12+m12*m.m22,
+
+            m20*m.m00+m21*m.m10+m22*m.m20,
+            m20*m.m01+m21*m.m11+m22*m.m21,
+            m20*m.m02+m21*m.m12+m22*m.m22
             );
 }
 
@@ -84,6 +93,27 @@ Vector3 Matrix3x3::operator*(const Vector3& v) const {
             );
 }
 
+Matrix3x3& Matrix3x3::scale(const float s) {
+    m00 *= s;
+    m01 *= s;
+    m02 *= s;
+
+    m10 *= s;
+    m11 *= s;
+    m12 *= s;
+
+    m20 *= s;
+    m21 *= s;
+    m22 *= s;
+
+    return *this;
+
+}
+
+Matrix3x3 Matrix3x3::scaled(const float s) const {
+    return Matrix3x3(*this).scale(s);
+}
+
 void fSwap(float& a, float& b) {
     float temp = a;
     a = b;
@@ -91,9 +121,9 @@ void fSwap(float& a, float& b) {
 }
 
 Matrix3x3& Matrix3x3::transpose() {
-    float temp = m01;
-    m01 = m10;
-    m10 = temp;
+    fSwap(m01, m10);
+    fSwap(m02, m20);
+    fSwap(m12, m21);
     return *this;
 }
 
@@ -109,7 +139,7 @@ Matrix3x3& Matrix3x3::invert() {
     if (!d) return *this;
 
     float n00 = m11*m22 - m12*m21;
-    float n01 = m12*m20 - m12*m22;
+    float n01 = m12*m20 - m10*m22;
     float n02 = m10*m21 - m11*m20;
 
     float n10 = m02*m21 - m01*m22;
@@ -132,9 +162,9 @@ Matrix3x3& Matrix3x3::invert() {
     m21 = n12 / d;
     m22 = n22 / d;
 
-    printf("| %f %f %f |", m00, m01, m02);
-    printf("| %f %f %f |", m10, m11, m12);
-    printf("| %f %f %f |", m20, m21, m22);
-
     return *this;
+}
+
+Matrix3x3 Matrix3x3::inverted() const {
+    return Matrix3x3(*this).invert();
 }
