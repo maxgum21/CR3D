@@ -16,7 +16,7 @@ ALLDEP = $(patsubst %,$(DEP)/%,$(_DEP))
 _OBJ = main.o Vector2.o Vector3.o Vector4.o Rasterizer.o Framebuffer.o Matrix2x2.o Matrix3x3.o Matrix4x4.o Camera.o ModelFile.o
 ALLOBJ = $(patsubst %,$(OBJ)/%,$(_OBJ))
 
-all: run
+all: $(OBJ) run
 
 re: clean all
 
@@ -28,6 +28,10 @@ build: $(ALLOBJ)
 
 clean:
 	rm -f $(OBJ)/*.o $(TARGET)
+	rmdir $(OBJ) 2> /dev/null || :
 
 $(OBJ)/%.o: $(SRC)/%.cpp
 	$(CC) -o $@ $< -g -c $(CFLAGS)
+
+$(OBJ):
+	mkdir -p $(OBJ)
