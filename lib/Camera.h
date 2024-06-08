@@ -1,7 +1,6 @@
 #ifndef INCLUDE_CAMERA_H
 #define INCLUDE_CAMERA_H
 
-#include "defs.h"
 #include "Matrix4x4.h"
 #include "Vector3.h"
 
@@ -33,6 +32,5 @@ class Camera {
             Matrix4x4 viewMatrix, projMatrix;
 };
 
-Vector4 transformVertex(const Vector4& vec, const Matrix4x4& MPVMatrix);
 
 #endif

@@ -1,7 +1,6 @@
 #ifndef INCLUDE_MATRIX3X3_H
 #define INCLUDE_MATRIX3X3_H
 
-#include "defs.h"
 #include "Vector3.h"
 
 class Matrix3x3 {

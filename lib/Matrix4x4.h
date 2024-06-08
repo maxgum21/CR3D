@@ -5,7 +5,8 @@
 #include "Vector3.h"
 #include "Vector4.h"
 #include "Matrix3x3.h"
-#include <strstream>
+#include <sstream>
+#include <math.h>
 
 class Matrix4x4 {
     public:
@@ -58,7 +59,7 @@ class Matrix4x4 {
         Matrix4x4& invert();
         Matrix4x4 inverted() const; 
 
-        void print(std::stringstream& stream);
+        void operator<<(std::stringstream& stream) const;
             
         float m00, m01, m02, m03;
         float m10, m11, m12, m13;

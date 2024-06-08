@@ -1,4 +1,6 @@
 #include "../lib/Vector3.h"
+#include <istream>
+#include <math.h>
 
 Vector3::Vector3(float x, float y, float z) : x(x), y(y), z(z) {}
 Vector3::Vector3(const Vector3& v)
@@ -85,4 +87,9 @@ float Vector3::getDistance(const Vector3& a, const Vector3& b) {
 
 Vector3 Vector3::lerp(const Vector3& a, const Vector3& b, float t) {
     return a + ((b - a) * t);
+}
+
+std::ostream& operator<<(std::ostream& ios, const Vector3& v) {
+    ios << v.x << ' ' << v.y << ' ' << v.z;
+    return ios;
 }

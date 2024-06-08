@@ -1,5 +1,4 @@
 #include "../lib/Matrix2x2.h"
-#include "../lib/Vector2.h"
 
 Matrix2x2::Matrix2x2()
     : m00(0), m01(0),

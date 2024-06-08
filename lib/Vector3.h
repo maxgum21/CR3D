@@ -1,6 +1,7 @@
 #ifndef INCLUDE_VECTOR3_H
 #define INCLUDE_VECTOR3_H
-#include <math.h>
+
+#include <ostream>
 
 class Vector3 {
     public:
@@ -30,5 +31,7 @@ class Vector3 {
 
         float x, y, z;
 };
+
+std::ostream& operator<<(std::ostream& ios, const Vector3& v);
 
 #endif

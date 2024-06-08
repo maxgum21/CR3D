@@ -1,6 +1,7 @@
 #include "../lib/Rasterizer.h"
+#include "../lib/Vector4.h"
+
 #include <ncurses.h>
-#include <thread>
 
 #define MAX(a, b) ((a > b) ? a : b)
 #define MIN(a, b) ((a > b) ? b : a)
@@ -53,7 +54,7 @@ void Rasterizer::presentFrame() {
 }
 
 void Rasterizer::clear() {
-    rFrame->clear(0);
+    rFrame->clear(' ');
 }
 
 float edgeCross(const Vector2& a, const Vector2& b, Vector2& p) {
@@ -95,6 +96,30 @@ void Rasterizer::drawTri(const Vector2& vv0, const Vector2& vv1, const Vector2& 
     }
 }
 
+Vector4 transformVertex(const Vector4& vec, const Matrix4x4& MPVMatrix) {
+    Vector4 res = MPVMatrix * vec;
+
+    res.x /= res.w;
+    res.y /= res.w;
+    res.z /= res.w;
+
+    return res;
+}
+
+void Rasterizer::drawModel(const Model& m, const Matrix4x4& transform) {
+    for (int i = 0; i < m.indices->size(); i += 3) {
+
+        int i0 = m.indices->at(i);
+        int i1 = m.indices->at(i + 1);
+        int i2 = m.indices->at(i + 2);
+
+        Vector4 v0 = transformVertex(Vector4(m.vertices->at(i0)), transform);
+        Vector4 v1 = transformVertex(Vector4(m.vertices->at(i1)), transform);
+        Vector4 v2 = transformVertex(Vector4(m.vertices->at(i2)), transform);
+
+        drawTri(v0.getXY(), v1.getXY(), v2.getXY());
+    }
+}
 
             /*float w0 = ((x - v0.x)*(v2.y - v0.y) - (v2.x - v0.x)*(y - v0.y)) /
                 ((v1.x - v0.x)*(v2.y - v0.y) - (v1.y - v0.y)*(v2.x - v0.x));

@@ -25,12 +25,3 @@ void Camera::calculateProjMatrix(float fov, float aspect, float zNear, float zFa
     projMatrix.transpose();
 }
 
-Vector4 transformVertex(const Vector4& vec, const Matrix4x4& MPVMatrix) {
-    Vector4 res = MPVMatrix * vec;
-
-    res.x /= res.w;
-    res.y /= res.w;
-    res.z /= res.w;
-
-    return res;
-}

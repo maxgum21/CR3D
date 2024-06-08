@@ -1,8 +1,15 @@
 #include "../lib/Vector4.h"
+#include <math.h>
 
 Vector4::Vector4(float x, float y, float z, float w) : x(x), y(y), z(z), w(w) {}
 Vector4::Vector4(const Vector4& v)
     : x(v.x), y(v.y), z(v.z), w(v.w) {}
+
+Vector4::Vector4(const Vector2& v)
+    : x(v.x), y(v.y), z(0), w(1) {}
+
+Vector4::Vector4(const Vector3& v)
+    : x(v.x), y(v.y), z(v.z), w(1) {}
 
 Vector4& Vector4::operator=(const Vector4& v) {
     x = v.x;
@@ -85,6 +92,6 @@ Vector4 Vector4::lerp(const Vector4& a, const Vector4& b, float t) {
     return a + ((b - a) * t);
 }
 
-void Vector4::print(std::stringstream& stream) {
+void Vector4::operator<<(std::stringstream& stream) const {
     stream << x << ' ' << y << ' ' << z << ' ' << w << '\n';
 }

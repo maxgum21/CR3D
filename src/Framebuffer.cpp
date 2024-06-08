@@ -7,6 +7,11 @@ Framebuffer::Framebuffer(int width, int height)
 {
     depthbuffer = new depth_t[width * height];
     colorbuffer = new color_t[width * height];
+
+    for (int i = 0; i < height; i++) {
+        colorbuffer[(i + 1) * width - 1] = '\n';
+    }
+    colorbuffer[width * height - 1] = 0;
 }
 
 Framebuffer::~Framebuffer() {
@@ -20,6 +25,12 @@ Framebuffer::Framebuffer(const Framebuffer& fb) : width(fb.width), height(fb.hei
     memcpy(depthbuffer, fb.depthbuffer, sizeof(depth_t) * width * height);
     colorbuffer = new color_t[width * height];
     memcpy(colorbuffer, fb.colorbuffer, sizeof(color_t) * width * height);
+
+    for (int i = 0; i < height - 1; i++) {
+        colorbuffer[(i + 1) * width - 1] = '\n';
+    }
+
+    colorbuffer[height * width - 1] = 0;
 }
 
 Framebuffer& Framebuffer::operator=(const Framebuffer& fb) {
@@ -27,17 +38,28 @@ Framebuffer& Framebuffer::operator=(const Framebuffer& fb) {
     memcpy(depthbuffer, fb.depthbuffer, sizeof(depth_t) * width * height);
     colorbuffer = new color_t[width * height];
     memcpy(colorbuffer, fb.colorbuffer, sizeof(color_t) * width * height);
+
+    for (int i = 0; i < height; i++) {
+        colorbuffer[(i + 1) * width - 1] = '\n';
+    }
+    colorbuffer[height * width - 1] = 0;
+
     return *this;
 }
 
 void Framebuffer::clear(color_t clearcolor) {
     memset(colorbuffer, clearcolor, sizeof(color_t) * width * height);
     memset(depthbuffer, MAX_DEPTH, sizeof(depth_t) * width * height);
+
+    for (int i = 0; i < height; i++) {
+        colorbuffer[(i + 1) * width - 1] = '\n';
+    }
+    colorbuffer[height * width - 1] = 0;
 }
 
 void Framebuffer::setPixel(int x, int y, depth_t depth, color_t color) {
 
-    if (x < 0 || x >= width || y < 0 || y >= height) return;
+    if (x < 0 || x >= (width - 1) || y < 0 || y >= height) return;
 
     int index = x + y * width;
 
@@ -48,7 +70,9 @@ void Framebuffer::setPixel(int x, int y, depth_t depth, color_t color) {
 }
 
 void Framebuffer::show() {
-    for (int y = 0; y < height; y++) {
+    mvprintw(0, 0, "%s", (char *)colorbuffer);
+    
+    /*for (int y = 0; y < height; y++) {
         for (int x = 0; x < width; x++) {
             int index = x + (y * width);
 
@@ -56,5 +80,5 @@ void Framebuffer::show() {
 
             mvprintw(y, x, "%c", (char)colorbuffer[index]);
         }
-    }
+    }*/
 }

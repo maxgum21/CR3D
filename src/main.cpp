@@ -1,11 +1,14 @@
-#include "../lib/defs.h"
 #include "../lib/Vector2.h"
 #include "../lib/Rasterizer.h"
 #include "../lib/Matrix4x4.h"
 #include "../lib/Camera.h"
-#include <ctime>
-#include <iterator>
+#include "../lib/ModelFile.h"
+
+#include <sstream>
 #include <ncurses.h>
+#include <iostream>
+#include <unistd.h>
+#include <time.h>
 
 #define WW 400
 #define WH 200
@@ -22,41 +25,35 @@ std::stringstream debug;
 int framerate = 0;
 
 float angle = 0.0;
-float offset = 0.0;
 
-Vector4 f1(-1, 1, 0, 1);
-Vector4 f2(1, 1, 0, 1);
-Vector4 f3(0, -1, 0, 1);
+float delta_time;
+
+Model* firstModel;
 
 bool renderFunc() {
     cam->calculateViewMatrix();
     Matrix4x4 PVMatrix = cam->getProjMat();
 
-    angle += 0.0001;
-    offset += 0.0001;
+    angle += delta_time;
 
     Matrix4x4 transform(1);
-    transform.translate(Vector3(0, 0, -2.f));
+    transform.translate(Vector3(0, 0, -7));
     transform.rotate(Vector3(0, 1, 0), angle);
+    transform.rotate(Vector3(0, 0, 1), angle);
     
     Matrix4x4 finalmat = PVMatrix * transform;
 
-    Vector4 v1 = transformVertex(f1, finalmat);
-    Vector4 v2 = transformVertex(f2, finalmat);
-    Vector4 v3 = transformVertex(f3, finalmat);
-
-    //v1.print(debug);
-    //debug <<'\n';
-
     raster->clear();
-    raster->drawTri(Vector2(v1.x, v1.y), Vector2(v2.x, v2.y), Vector2(v3.x, v3.y));
+    raster->drawModel(*firstModel, finalmat);
     return true;
 }
 
 
 int main() {
     std::cout << "Program started...\n";
-    
+
+    firstModel = new Model("models/teapot.obj");
+
     initscr();
 
     noecho();
@@ -79,19 +76,22 @@ int main() {
     clock_t begin_time = clock();
 
     while (c != 'q') {
+
+        clock_t new_time = clock();
+        delta_time = (new_time - begin_time) / (float)CLOCKS_PER_SEC;
+        begin_time = new_time;
+
         raster->presentFrame();
         raster->swap();
-        mvprintw(10, (mw * 100) / 70, "Framerate: %d f/s", framerate);
+        mvprintw(0, (mw * 80) / 100, "Framerate: %d f/s", (int)(1.0 / delta_time));
+        mvprintw(1, (mw * 80) / 100, "Resolution: %d by %d", mw, mh);
 
-        refresh();
+        //refresh();
 
         c = getch();
 
-        erase();
+        //erase();
         
-        clock_t new_time = clock();
-        framerate =  CLOCKS_PER_SEC /  (new_time - begin_time);
-        begin_time = new_time;
 
     }
     
@@ -100,17 +100,8 @@ int main() {
     endwin();
 
     delete raster;
+    delete firstModel;
     delete cam;
-
-    Matrix4x4 tr(1);
-    tr.translate(Vector3(1, 2, 3));
-    Vector4 vec(0, 4, 7, 1);
-
-    tr.print(debug);
-
-    (tr * vec).print(debug);
-
-    std::cout << debug.str();
 
     return 0;
 }

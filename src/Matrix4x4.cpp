@@ -1,5 +1,4 @@
 #include "../lib/Matrix4x4.h"
-#include <strstream>
 
 Matrix4x4::Matrix4x4()
     : m00(0), m01(0), m02(0), m03(0),
@@ -353,7 +352,7 @@ Matrix4x4& Matrix4x4::translate(const Vector3& vec) {
 }
 
 
-void Matrix4x4::print(std::stringstream& stream) {
+void Matrix4x4::operator<<(std::stringstream& stream) const {
     stream << '|' << m00 << ' ' << m01 << ' ' << m02 << ' ' << m03 << '|' << '\n'; 
     stream << '|' << m10 << ' ' << m11 << ' ' << m12 << ' ' << m13 << '|' << '\n'; 
     stream << '|' << m20 << ' ' << m21 << ' ' << m22 << ' ' << m23 << '|' << '\n'; 

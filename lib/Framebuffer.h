@@ -2,7 +2,6 @@
 #define INCLUDE_FRAMEBUFFER_H
 
 #include <sys/types.h>
-#include "defs.h"
 
 #define MAX_DEPTH 0xFF
 
