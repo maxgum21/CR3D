@@ -106,26 +106,3 @@ Vector4 transformVertex(const Vector4& vec, const Matrix4x4& MPVMatrix) {
     return res;
 }
 
-void Rasterizer::drawModel(const Model& m, const Matrix4x4& transform) {
-    for (int i = 0; i < m.indices->size(); i += 3) {
-
-        int i0 = m.indices->at(i);
-        int i1 = m.indices->at(i + 1);
-        int i2 = m.indices->at(i + 2);
-
-        Vector4 v0 = transformVertex(Vector4(m.vertices->at(i0)), transform);
-        Vector4 v1 = transformVertex(Vector4(m.vertices->at(i1)), transform);
-        Vector4 v2 = transformVertex(Vector4(m.vertices->at(i2)), transform);
-
-        drawTri(v0.getXY(), v1.getXY(), v2.getXY());
-    }
-}
-
-            /*float w0 = ((x - v0.x)*(v2.y - v0.y) - (v2.x - v0.x)*(y - v0.y)) /
-                ((v1.x - v0.x)*(v2.y - v0.y) - (v1.y - v0.y)*(v2.x - v0.x));
-
-            float w1 = (y - v0.y - w0*(v1.y - v0.y)) / (v2.y - v0.y);
-
-            if (w0 >= 0 && w1 >= 0 && (w0 + w1) <= 1) {
-                rFrame->setPixel(x, y, 0, '#');
-            }*/

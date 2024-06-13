@@ -25,6 +25,7 @@ std::stringstream debug;
 int framerate = 0;
 
 float angle = 0.0;
+float offsetx, offsetz = -3;
 
 float delta_time;
 
@@ -37,14 +38,54 @@ bool renderFunc() {
     angle += delta_time;
 
     Matrix4x4 transform(1);
-    transform.translate(Vector3(0, 0, -7));
-    transform.rotate(Vector3(0, 1, 0), angle);
-    transform.rotate(Vector3(0, 0, 1), angle);
+    transform.translate(Vector3(offsetx, -0, offsetz));
+    transform.rotate(Vector3(0, 1, 0).normalized(), angle);
+    //transform.rotate(Vector3(0, 0, 1), angle);
     
     Matrix4x4 finalmat = PVMatrix * transform;
 
     raster->clear();
-    raster->drawModel(*firstModel, finalmat);
+
+    for (int i = 0; i < firstModel->getSizeInd(); i += 3) {
+        int j1 = firstModel->ind[i + 0].v;
+        Vector4 v1(
+                firstModel->vert[j1 * 3 + 0],
+                firstModel->vert[j1 * 3 + 1],
+                firstModel->vert[j1 * 3 + 2],
+                1
+                );
+
+        int j2 = firstModel->ind[i + 1].v;
+        Vector4 v2(
+                firstModel->vert[j2 * 3 + 0],
+                firstModel->vert[j2 * 3 + 1],
+                firstModel->vert[j2 * 3 + 2],
+                1
+                );
+
+        int j3 = firstModel->ind[i + 2].v;
+        Vector4 v3(
+                firstModel->vert[j3 * 3 + 0],
+                firstModel->vert[j3 * 3 + 1],
+                firstModel->vert[j3 * 3 + 2],
+                1
+                );
+
+        Vector4 f1 = finalmat * v1;
+        Vector4 f2 = finalmat * v2;
+        Vector4 f3 = finalmat * v3;
+
+        f1 = Vector4( f1.x / f1.w, f1.y / f1.w, f1.z / f1.w, f1.w );
+        f2 = Vector4( f2.x / f2.w, f2.y / f2.w, f2.z / f2.w, f2.w );
+        f3 = Vector4( f3.x / f3.w, f3.y / f3.w, f3.z / f3.w, f3.w );
+
+        raster->drawTri(
+                f1.getXY(),
+                f2.getXY(),
+                f3.getXY()
+                );
+    }
+
     return true;
 }
 
@@ -52,7 +93,7 @@ bool renderFunc() {
 int main() {
     std::cout << "Program started...\n";
 
-    firstModel = new Model("models/teapot.obj");
+    firstModel = new Model("models/amogus.obj");
 
     initscr();
 
@@ -86,11 +127,26 @@ int main() {
         mvprintw(0, (mw * 80) / 100, "Framerate: %d f/s", (int)(1.0 / delta_time));
         mvprintw(1, (mw * 80) / 100, "Resolution: %d by %d", mw, mh);
 
-        //refresh();
+        refresh();
 
         c = getch();
 
-        //erase();
+        erase();
+
+        switch (c) {
+            case 'w':
+                offsetz -= 0.1;
+                break;
+            case 's':
+                offsetz += 0.1;
+                break;
+            case 'a':
+                offsetx -= 0.1;
+                break;
+            case 'd':
+                offsetx += 0.1;
+                break;
+        }
         
 
     }

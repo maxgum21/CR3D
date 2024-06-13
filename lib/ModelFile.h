@@ -6,6 +6,12 @@
 #include <vector>
 #include <string>
 
+typedef struct {
+    int v;
+    int n;
+    int uv;
+} Vertex;
+
 class Model {
     public:
         Model() {}
@@ -17,9 +23,18 @@ class Model {
         std::vector<Vector3>* vertices;
         std::vector<int>* indices;
 
+        float *vert, *normals, *uvs;
+        Vertex* ind;
+
+        int getSizeVert() { return sizeVert; }
+        int getSizeNorm() { return sizeNorm; }
+        int getSizeUV()   { return sizeUV;   }
+        int getSizeInd()  { return sizeInd;  }
+
     private:
         std::string filename;
         void readFile();
+        int sizeVert, sizeNorm, sizeUV, sizeInd;
 };
 
 #endif

@@ -15,8 +15,6 @@ class Rasterizer {
         
         void drawTri(const Vector2& v0, const Vector2& v1, const Vector2& v2);
 
-        void drawModel(const Model& m, const Matrix4x4& transform);
-
         inline void setRenderCB(bool (*renderCBFunc)()) {
             renderCB = renderCBFunc;
         }
